@@ -1,0 +1,15 @@
+{
+    "files.exclude": {
+        "Assets/Scenes" : true,
+        "obj" : true,
+        "Logs" : true,
+        "Temp" : true,
+        "Packages" : true,
+        "ProjectSettings" : true,
+        "Library" : true,
+        "**/*.meta": true,
+        "**/*.csproj": true,
+        "**/*.sln": true,
+        "**/*.suo": true,
+    }
+}
