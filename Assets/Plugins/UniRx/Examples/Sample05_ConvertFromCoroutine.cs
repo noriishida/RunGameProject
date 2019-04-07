@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace UniRx.Examples
 {
@@ -17,7 +18,10 @@ namespace UniRx.Examples
         // IEnumerator with callback
         static IEnumerator GetWWWCore(string url, IObserver<string> observer, CancellationToken cancellationToken)
         {
-            var www = new UnityEngine.WWW(url);
+            var www = UnityWebRequest.Get(url);
+
+            yield return www.SendWebRequest();
+
             while (!www.isDone && !cancellationToken.IsCancellationRequested)
             {
                 yield return null;
@@ -31,7 +35,7 @@ namespace UniRx.Examples
             }
             else
             {
-                observer.OnNext(www.text);
+                observer.OnNext(www.downloadHandler.text);
                 observer.OnCompleted();
             }
         }

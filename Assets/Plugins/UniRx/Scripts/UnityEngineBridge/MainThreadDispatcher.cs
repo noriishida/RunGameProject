@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using UniRx.InternalUtil;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace UniRx
 {
@@ -117,9 +118,9 @@ namespace UniRx
                     }
 
                     var type = current.GetType();
-                    if (type == typeof(WWW))
+                    if (type == typeof(UnityWebRequest))
                     {
-                        var www = (WWW)current;
+                        var www = (UnityWebRequest)current;
                         editorQueueWorker.Enqueue(_ => ConsumeEnumerator(UnwrapWaitWWW(www, routine)), null);
                         return;
                     }
@@ -156,8 +157,10 @@ namespace UniRx
                 }
             }
 
-            IEnumerator UnwrapWaitWWW(WWW www, IEnumerator continuation)
+            IEnumerator UnwrapWaitWWW(UnityWebRequest www, IEnumerator continuation)
             {
+                yield return www.SendWebRequest();
+                
                 while (!www.isDone)
                 {
                     yield return null;
